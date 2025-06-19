@@ -226,7 +226,7 @@ body {
     display: flex;
     gap: 2rem;
     justify-content: center;
-    margin-bottom: 4rem;
+    margin-bottom: 3rem;
     position: relative;
     z-index: 10;
 }
@@ -250,18 +250,38 @@ body {
 }
 
 .partner-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    margin-bottom: 4rem;
+    margin-top: 3rem;
+}
+
+/* Hero divider with gradient */
+.hero-divider {
     width: 100%;
+    height: 1px;
+    background: linear-gradient(to right, transparent 0%, rgba(255, 255, 255, 0.3) 50%, transparent 100%);
+    margin: 4rem 0 3rem;
+}
+
+/* Partner logos - distributed spacing */
+.partner-logos {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 2rem;
+    width: 100%;
+    max-width: 1140px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.partner-logos .partner-logo {
+    flex: none;
 }
 
 .partner-logo {
     height: 40px;
+    object-fit: contain;
     opacity: 0.7;
-    transition: opacity 0.3s ease, transform 0.3s ease;
-    filter: grayscale(80%);
+    transition: opacity 0.3s ease;
 }
 
 .partner-logo:hover {
@@ -762,6 +782,12 @@ body {
 .roadmap-container {
     width: 1140px;
     margin: 0 auto;
+    text-align: center;
+}
+
+.roadmap-container .subtitle-wrapper,
+.roadmap-container .section-heading {
+    text-align: center;
 }
 
 .roadmap-timeline {
@@ -1007,6 +1033,7 @@ body {
     justify-content: center;
     transition: all 0.3s ease;
     text-decoration: none;
+    color: rgba(255, 255, 255, 0.8);
 }
 
 .social-link:hover {
@@ -1025,4 +1052,10 @@ body {
     color: rgba(255, 255, 255, 0.6);
     font-size: 0.875rem;
     margin: 0;
+}
+
+/* Smooth scrolling with offset */
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 120px;
 } 
