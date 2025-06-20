@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EcoAI - Memory on Chain. Intelligence Unchained.</title>
+    <title>EcoAI</title>
     <link rel="icon" type="image/png" href="images/logo.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -708,6 +708,174 @@
             });
         });
     });
+    </script>
+
+    <script>
+    // iPad版本carousel控制 - 显示2个item
+    function updateCarouselForiPad() {
+        if (window.innerWidth >= 768 && window.innerWidth <= 1024) {
+            const carousel = document.getElementById('featureCarousel');
+            const cards = carousel.querySelectorAll('.carousel-card');
+            const dotsContainer = document.querySelector('.carousel-dots');
+            
+            const cardsToShow = 2; // iPad显示2个
+            const totalCards = cards.length;
+            const maxSlide = totalCards - cardsToShow; // 5-2=3，需要4个dots (0,1,2,3)
+            let currentSlide = 0;
+            
+            // 清空并重新创建dots
+            dotsContainer.innerHTML = '';
+            
+            // 为iPad版本创建4个dots
+            for (let i = 0; i <= maxSlide; i++) {
+                const dot = document.createElement('div');
+                dot.classList.add('carousel-dot');
+                if (i === 0) dot.classList.add('active');
+                
+                dot.addEventListener('click', () => {
+                    currentSlide = i;
+                    updateiPadCarousel();
+                });
+                
+                dotsContainer.appendChild(dot);
+            }
+            
+            function updateiPadCarousel() {
+                const cardWidth = cards[0].offsetWidth;
+                const containerStyle = getComputedStyle(carousel);
+                const gap = parseInt(containerStyle.gap) || 24; // iPad版gap为1.5rem
+                
+                // 计算偏移量，每次移动一个card的宽度
+                const offset = currentSlide * (cardWidth + gap);
+                
+                carousel.style.transform = `translateX(-${offset}px)`;
+                
+                // 更新dots状态
+                const dots = dotsContainer.querySelectorAll('.carousel-dot');
+                dots.forEach((dot, index) => {
+                    dot.classList.toggle('active', index === currentSlide);
+                });
+            }
+            
+            // 初始化carousel
+            updateiPadCarousel();
+            
+            // 窗口大小改变时重新计算
+            window.addEventListener('resize', () => {
+                if (window.innerWidth >= 768 && window.innerWidth <= 1024) {
+                    updateiPadCarousel();
+                }
+            });
+        } else {
+            // 非iPad时恢复原始dots
+            const dotsContainer = document.querySelector('.carousel-dots');
+            const originalDotCount = 3; // 桌面版原始dots数量
+            
+            if (dotsContainer.children.length !== originalDotCount) {
+                dotsContainer.innerHTML = '';
+                
+                for (let i = 0; i < originalDotCount; i++) {
+                    const dot = document.createElement('div');
+                    dot.classList.add('carousel-dot');
+                    if (i === 0) dot.classList.add('active');
+                    dotsContainer.appendChild(dot);
+                }
+                
+                // 重新绑定桌面版事件
+                const carousel = document.getElementById('featureCarousel');
+                const dots = dotsContainer.querySelectorAll('.carousel-dot');
+                
+                dots.forEach((dot, index) => {
+                    dot.addEventListener('click', () => {
+                        const cards = carousel.querySelectorAll('.carousel-card');
+                        const cardWidth = cards[0].offsetWidth;
+                        const containerStyle = getComputedStyle(carousel);
+                        const gap = parseInt(containerStyle.gap) || 32;
+                        const offset = index * (cardWidth + gap);
+                        
+                        carousel.style.transform = `translateX(-${offset}px)`;
+                        
+                        dots.forEach((d, i) => {
+                            d.classList.toggle('active', i === index);
+                        });
+                    });
+                });
+            }
+        }
+    }
+    
+    // 手机版本carousel控制 - 显示1个item
+    function updateCarouselForMobile() {
+        if (window.innerWidth <= 767) {
+            const carousel = document.getElementById('featureCarousel');
+            const cards = carousel.querySelectorAll('.carousel-card');
+            const dotsContainer = document.querySelector('.carousel-dots');
+            
+            const cardsToShow = 1; // 手机显示1个
+            const totalCards = cards.length;
+            const maxSlide = totalCards - cardsToShow; // 5-1=4，需要5个dots (0,1,2,3,4)
+            let currentSlide = 0;
+            
+            // 清空并重新创建dots
+            dotsContainer.innerHTML = '';
+            
+            // 为手机版本创建5个dots
+            for (let i = 0; i <= maxSlide; i++) {
+                const dot = document.createElement('div');
+                dot.classList.add('carousel-dot');
+                if (i === 0) dot.classList.add('active');
+                
+                dot.addEventListener('click', () => {
+                    currentSlide = i;
+                    updateMobileCarousel();
+                });
+                
+                dotsContainer.appendChild(dot);
+            }
+            
+            function updateMobileCarousel() {
+                const carouselContainer = carousel.parentElement;
+                const containerWidth = carouselContainer.offsetWidth;
+                
+                // 手机版精确偏移量计算 - 每个卡片占满容器宽度
+                const offset = currentSlide * containerWidth;
+                
+                carousel.style.transform = `translateX(-${offset}px)`;
+                
+                // 更新dots状态
+                const dots = dotsContainer.querySelectorAll('.carousel-dot');
+                dots.forEach((dot, index) => {
+                    dot.classList.toggle('active', index === currentSlide);
+                });
+            }
+            
+            // 初始化carousel
+            updateMobileCarousel();
+            
+            // 窗口大小改变时重新计算
+            window.addEventListener('resize', () => {
+                if (window.innerWidth <= 767) {
+                    updateMobileCarousel();
+                }
+            });
+        }
+    }
+    
+    // 统一的carousel管理函数
+    function updateCarouselForAllDevices() {
+        if (window.innerWidth <= 767) {
+            updateCarouselForMobile();
+        } else if (window.innerWidth >= 768 && window.innerWidth <= 1024) {
+            updateCarouselForiPad();
+        } else {
+            // 桌面版逻辑
+            updateCarouselForiPad(); // 这个函数里已经有恢复桌面版的逻辑
+        }
+    }
+    
+    // 页面加载和窗口大小改变时检查设备类型并应用相应版本
+    document.addEventListener('DOMContentLoaded', updateCarouselForAllDevices);
+    window.addEventListener('resize', updateCarouselForAllDevices);
     </script>
 </body>
 </html>
